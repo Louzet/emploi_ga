@@ -17,7 +17,7 @@ install: true
 
 before_install:
   - composer self-update
-  - composer install
+  - php -d memory_limit=-1 composer install --prefer-dist --no-interaction
 
 # commands that will verify build
 script:
