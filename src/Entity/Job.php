@@ -45,7 +45,7 @@ class Job
     private $createdAt;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default":false})
      */
     private $isPublished;
 
@@ -62,7 +62,7 @@ class Job
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -74,7 +74,7 @@ class Job
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -122,7 +122,7 @@ class Job
         return $this;
     }
 
-    public function getIsPublished(): ?bool
+    public function getIsPublished(): bool
     {
         return $this->isPublished;
     }
