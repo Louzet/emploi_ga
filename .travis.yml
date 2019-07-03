@@ -23,7 +23,7 @@ before_script:
 
 # commands that will verify build
 script:
-  - ./bin/phpunit
+  - ./vendor/bin/phpunit tests/
 
 # Customize when the notification emails are sent.
 notifications:
