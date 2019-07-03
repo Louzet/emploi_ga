@@ -1,0 +1,42 @@
+dist: trusty
+
+sudo: false
+
+language: php
+
+php:
+  - "7.2"
+
+matrix:
+  fast_finish: true
+
+env:
+  - SYMFONY_VERSION="4.3.2" DB=mysql
+
+install: true
+
+before_script:
+  - composer self-update
+  - composer require --dev symfony/test-pack
+
+# commands that will verify build
+script:
+  - ./bin/phpunit
+
+# Customize when the notification emails are sent.
+notifications:
+  email:
+    recipients:
+      - angelyx@live.fr
+    on_success: never # default: change
+    on_failure: always # default: always
+
+# safelist
+branches:
+  only:
+    - master
+    - dev
+
+cache:
+  directories:
+    - $HOME/.composer/cache
