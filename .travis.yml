@@ -5,13 +5,16 @@ sudo: false
 language: php
 
 php:
-  - 7.3.5
+  - "7.1"
+  - "7.2"
+  - "7.3.5"
 
 matrix:
   fast_finish: true
 
 env:
-  - SYMFONY_VERSION="4.3.*" DB=mysql
+  - SYMFONY_VERSION="4.3.*"
+  - DB=mysql
 
 install: true
 
@@ -24,7 +27,7 @@ before_script:
 
 # commands that will verify build
 script:
-  - ./vendor/bin/phpunit tests/
+  - ./vendor/bin/phpunit tests/ --coverage-html public/coverage
 
 # Customize when the notification emails are sent.
 notifications:
