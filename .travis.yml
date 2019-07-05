@@ -5,16 +5,13 @@ sudo: false
 language: php
 
 php:
-  - "7.1"
-  - "7.2"
-  - "7.3.5"
+  - "7.3.*"
 
 matrix:
   fast_finish: true
 
 env:
-  - SYMFONY_VERSION="4.3.*"
-  - DB=mysql
+  - SYMFONY_VERSION="4.3.*" DB=mysql
 
 install: true
 

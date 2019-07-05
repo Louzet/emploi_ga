@@ -40,14 +40,16 @@ class JobTest extends TestCase
         $this->assertIsString($job->getCreatedAtAgo());
     }
 
-    public function testJobWithoutDescriptionReturnException()
-    {
-        $this->expectException(InvalidArgumentException::class);
-    }
-
     public function testJobCanReturnShortDescription()
     {
         $job = new Job("blablabla");
-        $job->setDescription("");
+        $job->setTextDescription("
+            Votre défi : 
+            offrir à chaque client un moment de plaisir par un accueil et un sens du service forts. 
+            Sourire, écoute et sens du service sont vos plus grands atouts puisqu'ils 
+            vous permettent de créer un lien privilégié avec le voyageur, 
+            de comprendre ses attentes et de satisfaire ses envies."
+        );
+        $this->assertGreaterThan(strlen($job->getShortDescription()), strlen($job->getDescription()));
     }
 }
