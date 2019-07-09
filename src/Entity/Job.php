@@ -2,12 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
-use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Exceptions\JobException;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,19 +10,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "delete", "put"},
- *     normalizationContext={"groups"={"job:read"}, "swagger_definition_name"="READ"},
- *     denormalizationContext={"groups"={"job:write"}, "swagger_definition_name"="WRITE"},
- *     attributes={
- *          "pagination_items_per_page"=10
- *     }
- * )
- * @ApiFilter(BooleanFilter::class, properties={"isPublished"})
- * @ApiFilter(SearchFilter::class, properties={"title":"partial", "description":"partial"})
- * @ApiFilter(RangeFilter::class, properties={"priceMinimum", "priceMaximum"})
- * @ApiFilter(PropertyFilter::class)
  *
  * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  */
