@@ -1,7 +1,7 @@
 # Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
 fos_rest:
     routing_loader:
-        default_format: 'json'
+        default_format: json
         include_format: false
 
     format_listener:
@@ -11,6 +11,9 @@ fos_rest:
     exception:
         enabled: true
         exception_controller: 'fos_rest.exception.controller:showAction'
+
+    service:
+        inflector: inflector.nopluralize_inflector
 
     view:
         view_response_listener: 'force'

@@ -3,51 +3,99 @@
 namespace App\Controller;
 
 use App\Entity\Job;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\JobRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class JobController extends AbstractController
+/**
+ * Class JobController
+ * @package App\Controller
+ */
+class JobController extends AbstractFOSRestController
 {
+
     /**
-     * @Route("/job", name="job", methods={"GET"})
+     * @var JobRepository
      */
-    public function getJobs()
+    private $jobRepository;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * JobController constructor.
+     * @param JobRepository $jobRepository
+     * @param EntityManagerInterface $entityManager
+     * @param RequestStack $request
+     */
+    public function __construct(JobRepository $jobRepository, EntityManagerInterface $entityManager, RequestStack $request)
     {
-        return $this->json([
-            "message" => "welcome to my controller",
-            "path" => "src/Controller/JobController.php"
-        ]);
+        $this->jobRepository = $jobRepository;
+        $this->entityManager = $entityManager;
+        $this->request = $request;
     }
 
     /**
-     * @Route("/job", name="job", methods={"POST"})
+     * @Rest\Route("/jobs", name="jobs_list", methods={"GET"}, options={"method_prefix"=false, "expose"=true })
+     * @return JsonResponse
      */
-    public function createPost()
+    public function getJobsList()
     {
-        return $this->json([
-            "message" => "post function",
-            "path" => "src/Controller/JobController.php"
-        ]);
+        $data = $this->jobRepository->findAll();
+
+        return $this->json($data, JsonResponse::HTTP_OK);
     }
 
     /**
-     * @Route("/update", name="update", methods={"PUT"})
+     * @Rest\Route("/jobs", name="jobs_create", methods={"POST"}, options={"expose"=true })
+     * @return JsonResponse
      */
-    public function updateJob()
+    public function createJob()
     {
-        return $this->json([
-            "message" => "update function",
-            "path" => "src/Controller/JobController.php"
-        ]);
+        $title        = $this->request->getMasterRequest()->get('title');
+        $description  = $this->request->getMasterRequest()->get('description');
+        $priceMinimum = $this->request->getMasterRequest()->get('priceMinimum');
+        $priceMaximum = $this->request->getMasterRequest()->get('priceMaximum');
+
+        if (!is_null($title) && !is_null($description) && !is_null($priceMinimum) && !is_null($priceMaximum)){
+            $job = new Job($title, $description, $priceMinimum, $priceMaximum);
+
+            $this->entityManager->persist($job);
+            $this->entityManager->flush();
+
+            return $this->json(['code' => 201, 'message' => "job $title was successfully created"], Response::HTTP_CREATED);
+        }
+
+        return $this->json(['code' => 400, 'message' => 'Invalid request'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @param Job $job
-     * @Route("/job/{id}", name="update", methods={"PATCH"})
+     * @Rest\Route("/jobs/{id}", name="jobs_view", methods={"GET"}, options={"method_prefix"=false, "expose"=true })
+     * @return JsonResponse
      */
-    public function updateJobTitle(Job $job)
+    public function getOneJob()
     {
+        $job_id = $this->request->getMasterRequest()->attributes->get('id');
+        $data = $this->jobRepository->find($job_id);
 
+        if (!$data){
+            return $this->json(['code' => 404, 'message' => 'resource not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($data, Response::HTTP_OK);
     }
 
 }

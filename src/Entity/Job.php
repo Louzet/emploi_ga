@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Exceptions\JobException;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -36,7 +36,6 @@ class Job
 
     /**
      * @Assert\NotBlank()
-     * @
      * @ORM\Column(type="text")
      * @Groups({"job:read"})
      */
@@ -72,12 +71,18 @@ class Job
     /**
      * Job constructor.
      * @param string $title
+     * @param string $description
+     * @param int $priceMinimum
+     * @param int $priceMaximum
      */
-    public function __construct(string $title)
+    public function __construct(string $title, string $description, int $priceMinimum, int $priceMaximum)
     {
         $this->title = $title;
-        if (empty($this->title)){
-            throw JobException::EmptyParamsException();
+        $this->description = $description;
+        $this->priceMinimum = $priceMinimum;
+        $this->priceMaximum = $priceMaximum;
+        if (empty($this->title) || empty($this->description) || empty($this->priceMinimum) || empty($this->priceMaximum)){
+            throw new BadRequestHttpException("some fields are required", null, 400);
         }
         $this->createdAt = Carbon::now();
         $this->isPublished = false;
