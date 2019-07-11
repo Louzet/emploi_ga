@@ -1,10 +1,9 @@
 <?php
 
-
 namespace App\Exceptions;
 
 
-class JobException extends \InvalidArgumentException
+class JobException extends \Exception
 {
 
     /**
@@ -12,7 +11,7 @@ class JobException extends \InvalidArgumentException
      * @param string $message
      * @param int $code
      */
-    public function __construct(string $message, int $code = 0)
+    public function __construct(string $message, int $code = 500)
     {
         parent::__construct($message, $code);
     }
@@ -24,7 +23,7 @@ class JobException extends \InvalidArgumentException
 
     public static function EmptyParamsException()
     {
-        $message = "title is required";
-        return new self($message, 400);
+        $message = "some fields are required";
+        return new static($message, 400);
     }
 }
