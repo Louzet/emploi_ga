@@ -65,13 +65,6 @@ class JobControllerTest extends WebTestCase
         $client->request($method, $url);
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
-        $this->assertTrue(
-            $client->getResponse()->headers->contains(
-                'Content-Type',
-                'application/json'
-            )
-        );
-
         $response = $client->getResponse();
         $content = json_decode($response->getContent(), true);
         $this->assertIsArray($content);

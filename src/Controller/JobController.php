@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class JobController
@@ -34,18 +35,24 @@ class JobController extends AbstractFOSRestController
      * @var Request
      */
     private $request;
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * JobController constructor.
      * @param JobRepository $jobRepository
      * @param EntityManagerInterface $entityManager
      * @param RequestStack $request
+     * @param SerializerInterface $serializer
      */
-    public function __construct(JobRepository $jobRepository, EntityManagerInterface $entityManager, RequestStack $request)
+    public function __construct(JobRepository $jobRepository, EntityManagerInterface $entityManager, RequestStack $request, SerializerInterface $serializer)
     {
         $this->jobRepository = $jobRepository;
         $this->entityManager = $entityManager;
         $this->request = $request;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -54,9 +61,11 @@ class JobController extends AbstractFOSRestController
      */
     public function getJobsList()
     {
-        $data = $this->jobRepository->findAll();
+        $jobs = $this->jobRepository->findAll();
 
-        return $this->json($data, JsonResponse::HTTP_OK);
+        $data = $this->serializer->serialize($jobs, 'json');
+
+        return new JsonResponse($data, JsonResponse::HTTP_OK, [], true);
     }
 
     /**
@@ -76,10 +85,16 @@ class JobController extends AbstractFOSRestController
             $this->entityManager->persist($job);
             $this->entityManager->flush();
 
-            return $this->json(['code' => 201, 'message' => "job $title was successfully created"], Response::HTTP_CREATED);
+            $message = ['code' => 201, 'message' => "job $title was successfully created"];
+            $message = $this->serializer->serialize($message, 'json');
+
+            return new JsonResponse($message, Response::HTTP_CREATED, [], true);
         }
 
-        return $this->json(['code' => 400, 'message' => 'Invalid request'], Response::HTTP_BAD_REQUEST);
+        $message = ['code' => 400, 'message' => 'Invalid request'];
+        $message = $this->serializer->serialize($message, 'json');
+
+        return new JsonResponse($message, Response::HTTP_BAD_REQUEST, [], true);
     }
 
     /**
@@ -89,13 +104,17 @@ class JobController extends AbstractFOSRestController
     public function getOneJob()
     {
         $job_id = $this->request->getMasterRequest()->attributes->get('id');
-        $data = $this->jobRepository->find($job_id);
+        $job = $this->jobRepository->find($job_id);
 
-        if (!$data){
-            return $this->json(['code' => 404, 'message' => 'resource not found'], Response::HTTP_NOT_FOUND);
+        if (!$job){
+            $message = ['code' => 404, 'message' => 'resource not found'];
+            $message = $this->serializer->serialize($message, 'json');
+            return new JsonResponse($message, Response::HTTP_NOT_FOUND, [], true);
         }
 
-        return $this->json($data, Response::HTTP_OK);
+        $data = $this->serializer->serialize($job, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
 }
