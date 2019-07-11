@@ -59,7 +59,7 @@ class JobControllerTest extends WebTestCase
      * @param $method
      * @param $url
      */
-    public function testGetJobListIfNotAuthenticated($method, $url)
+    /*public function testGetJobListIfNotAuthenticated($method, $url)
     {
         $client = static::createClient();
         $client->request($method, $url);
@@ -68,14 +68,14 @@ class JobControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = json_decode($response->getContent(), true);
         $this->assertIsArray($content);
-    }
+    }*/
 
     /**
      * @dataProvider getInvalidJobResource
      * @param $method
      * @param $url
      */
-    public function testInvalidUrlForInexistantJob($method, $url)
+    /*public function testInvalidUrlForInexistantJob($method, $url)
     {
         $client = static::createClient();
         $client->request($method, $url);
@@ -85,7 +85,7 @@ class JobControllerTest extends WebTestCase
 
         $this->assertJson('{"code":404, "message":"resource not found"}',
             $response->getContent());
-    }
+    }*/
 
     /**
      * @dataProvider postUrlForSmockTest
