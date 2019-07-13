@@ -1,3 +1,4 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+jobs:
+  resource: App\Controller\JobController
+  type: annotation
+  prefix: /api
