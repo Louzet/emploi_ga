@@ -74,6 +74,7 @@ class Job
      * @param string $description
      * @param int $priceMinimum
      * @param int $priceMaximum
+     * @throws \Exception
      */
     public function __construct(string $title, string $description, int $priceMinimum, int $priceMaximum)
     {
@@ -199,6 +200,14 @@ class Job
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
     }
 
     /**
