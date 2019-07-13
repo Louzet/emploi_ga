@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-http": "*",
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "friendsofsymfony/rest-bundle": "^2.5",
         "nesbot/carbon": "^2.20",
