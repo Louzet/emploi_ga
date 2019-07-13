@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "ext-http": "*",
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "friendsofsymfony/rest-bundle": "^2.5",
         "nesbot/carbon": "^2.20",
@@ -28,8 +27,7 @@
         "symfony/maker-bundle": "^1.11",
         "symfony/profiler-pack": "^1.0",
         "symfony/test-pack": "^1.0",
-        "symfony/web-server-bundle": "4.3.*",
-      "ext-http": "*"
+        "symfony/web-server-bundle": "4.3.*"
     },
     "config": {
         "preferred-install": {
