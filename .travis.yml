@@ -24,7 +24,7 @@ before_script:
 
 # commands that will verify build
 script:
-  - ./vendor/bin/phpunit tests/ --testdox -v
+  - ./vendor/bin/phpunit tests/ --coverage-html public/coverage
 
 # Customize when the notification emails are sent.
 notifications:

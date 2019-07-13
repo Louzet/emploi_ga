@@ -1,4 +1,4 @@
 jobs:
+  type: rest
   resource: App\Controller\JobController
-  type: annotation
-  prefix: /api
+  prefix: api
